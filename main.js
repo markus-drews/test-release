@@ -6,4 +6,6 @@
 //Add a change which really breaks the game
 // Okay, now it is really a breaking change
 // Retry to produce a real breaking change
+
+// Add a new feature
 // add wonderful things
