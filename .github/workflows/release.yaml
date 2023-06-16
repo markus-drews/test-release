@@ -47,7 +47,7 @@ jobs:
 
       - name: Cancel action if there is no next release tag
         uses: andymckay/cancel-action@0.3
-        if: ${{ env.VERSION == '' }}
+        if: needs.release.outputs.VERSION == ''
 
       - name: Build container image
         run: docker build -t registry.digitalocean.com/up2talk-k8s-registry/testrepo:${{ steps.semantic_release_info.outputs.git_tag }} .
