@@ -29,6 +29,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Test
+        run: |
+          echo ${{ steps.semantic_release_info.outputs.git_tag }}
+
       - name: Cancel action if there is no next release tag
         uses: andymckay/cancel-action@0.2
         if: steps.semantic_release_info.outputs.git_tag == 'undefined'
