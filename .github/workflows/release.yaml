@@ -43,6 +43,7 @@ jobs:
 
       - env:
           VERSION: ${{needs.job1.outputs.VERSION}}
+        run: echo "$VERSION"
 
       - name: Cancel action if there is no next release tag
         uses: andymckay/cancel-action@0.3
