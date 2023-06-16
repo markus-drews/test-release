@@ -2,8 +2,7 @@ name: DO
 
 on:
   push:
-    tags:
-      - '*.*.*'
+    branches: [ci/add-release-workflow]
 
 jobs:
   release:
