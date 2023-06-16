@@ -13,20 +13,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - uses: actions/setup-node@v3
         with:
           node-version: 16
       - run: npm ci
-      # - run: npm run build
+
+      - name: Gets semantic release info
+        id: semantic_release_info
+        uses: jossef/action-semantic-release-info@v2.1.0
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
       - run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+      - run: git checkout HEAD^
 
       - name: Set env
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
 
       - name: Build container image
-        run: docker build -t registry.digitalocean.com/up2talk-k8s-registry/testrepo:$(echo $RELEASE_VERSION) .
+        run: docker build -t registry.digitalocean.com/up2talk-k8s-registry/testrepo:${{ steps.semantic_release_info.outputs.git_tag }} .
 
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
@@ -37,4 +49,4 @@ jobs:
         run: doctl registry login --expiry-seconds 600
 
       - name: Push image to DigitalOcean Container Registry
-        run: docker push registry.digitalocean.com/up2talk-k8s-registry/testrepo:$(echo $RELEASE_VERSION)
+        run: docker push registry.digitalocean.com/up2talk-k8s-registry/testrepo:${{ steps.semantic_release_info.outputs.git_tag }}
