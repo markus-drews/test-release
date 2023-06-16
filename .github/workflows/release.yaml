@@ -16,8 +16,10 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
-      - run: npm i -D semantic-release @semantic-release/git @semantic-release/github
+          node-version: 18
+
+      - name: Install semantic-release
+        run: npm i -D semantic-release @semantic-release/git @semantic-release/github
 
       - name: Gets semantic release info
         id: semantic_release_info
@@ -33,7 +35,7 @@ jobs:
         uses: andymckay/cancel-action@0.3
         if: steps.semantic_release_info.outputs.git_tag == ''
 
-      - name: unisntall semantic-release
+      - name: Uninstall semantic-release
         run: npm r semantic-release @semantic-release/git @semantic-release/github
 
       - name: Build container image
