@@ -1,38 +1,33 @@
-name: push
+# name: push
 
-on:
-  push:
-    branches: [main]
-    tags:
-      - "*.*.*"
-jobs:
-  release:
-    permissions:
-      contents: write
-      issues: write
-      pull-requests: write
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
+# on:
+#   push:
+#     branches: [main]
+#     tags:
+#       - "*.*.*"
+# jobs:
+#   release:
+#     permissions:
+#       contents: write
+#       issues: write
+#       pull-requests: write
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v3
 
-      - name: Set env
-        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+#       - name: Set env
+#         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
 
-      - name: Test
-        run: |
-          echo $RELEASE_VERSION
-          echo ${{ env.RELEASE_VERSION }}
+#       - name: Build container image
+#         run: docker build -t registry.digitalocean.com/up2talk-k8s-registry/testrepo:$(echo $RELEASE_VERSION) .
 
-      - name: Build container image
-        run: docker build -t registry.digitalocean.com/up2talk-k8s-registry/testrepo:$(echo $RELEASE_VERSION) .
+#       - name: Install doctl
+#         uses: digitalocean/action-doctl@v2
+#         with:
+#           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+#       - name: Log in to DigitalOcean Container Registry with short-lived credentials
+#         run: doctl registry login --expiry-seconds 600
 
-      - name: Log in to DigitalOcean Container Registry with short-lived credentials
-        run: doctl registry login --expiry-seconds 600
-
-      - name: Push image to DigitalOcean Container Registry
-        run: docker push registry.digitalocean.com/up2talk-k8s-registry/testrepo:$(echo $GITHUB_SHA | head -c7)
+#       - name: Push image to DigitalOcean Container Registry
+#         run: docker push registry.digitalocean.com/up2talk-k8s-registry/testrepo:$(echo $RELEASE_VERSION)
