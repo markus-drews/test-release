@@ -17,7 +17,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - run: npm i semantic-release @semantic-release/git @semantic-release/github -D
+      - run: npm i -D semantic-release @semantic-release/git @semantic-release/github
 
       - name: Gets semantic release info
         id: semantic_release_info
@@ -32,6 +32,9 @@ jobs:
       - name: Cancel action if there is no next release tag
         uses: andymckay/cancel-action@0.3
         if: steps.semantic_release_info.outputs.git_tag == ''
+
+      - name: unisntall semantic-release
+        run: npm r semantic-release @semantic-release/git @semantic-release/github
 
       - name: Build container image
         run: docker build -t registry.digitalocean.com/up2talk-k8s-registry/testrepo:${{ steps.semantic_release_info.outputs.git_tag }} .
