@@ -23,7 +23,7 @@ jobs:
           echo ${{ env.RELEASE_VERSION }}
 
       - name: Build container image
-        run: docker build -t registry.digitalocean.com/up2talk-k8s-registry/testrepo:$(echo $RELEASE_VERSION | head -c7) .
+        run: docker build -t registry.digitalocean.com/up2talk-k8s-registry/testrepo:$(echo $RELEASE_VERSION) .
 
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
